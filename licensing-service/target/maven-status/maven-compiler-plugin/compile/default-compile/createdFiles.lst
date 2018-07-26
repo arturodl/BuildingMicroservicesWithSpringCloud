@@ -1,0 +1,3 @@
+com\thoughtmechanix\licenses\Application.class
+com\thoughtmechanix\licenses\controllers\LicenseServiceController.class
+com\thoughtmechanix\licenses\model\License.class
