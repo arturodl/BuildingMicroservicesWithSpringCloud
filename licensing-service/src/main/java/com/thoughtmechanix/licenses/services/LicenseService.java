@@ -2,9 +2,13 @@ package com.thoughtmechanix.licenses.services;
 
 import com.thoughtmechanix.licenses.config.ServiceConfig;
 import com.thoughtmechanix.licenses.model.License;
+import com.thoughtmechanix.licenses.model.Organization;
 import com.thoughtmechanix.licenses.repository.LicenseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import com.thoughtmechanix.licenses.clients.OrganizationDiscoveryClient;
+import com.thoughtmechanix.licenses.clients.OrganizationFeignClient;
+import com.thoughtmechanix.licenses.clients.OrganizationRestTemplateClient;
 import java.util.List;
 import java.util.UUID;
 
@@ -17,10 +21,62 @@ public class LicenseService {
 	@Autowired
 	ServiceConfig config;
 
+	@Autowired
+    OrganizationFeignClient organizationFeignClient;
+
+    @Autowired
+    OrganizationRestTemplateClient organizationRestClient;
+
+    @Autowired
+	OrganizationDiscoveryClient organizationDiscoveryClient;
+
 	public License getLicense(String organizationId,String licenseId) {
 		License license = licenseRepository.findByOrganizationIdAndLicenseId(
 		organizationId, licenseId);
 		return license.withComment(config.getExampleProperty());
+	}
+
+	private Organization retrieveOrgInfo(String organizationId, String clientType){
+		System.out.println("Getting in retrieveOrgInfo");
+
+        Organization organization = null;
+
+        switch (clientType) {
+            case "feign":
+                System.out.println("I am using the feign client");
+                organization = organizationFeignClient.getOrganization(organizationId);
+                break;
+            case "rest":
+                System.out.println("I am using the rest client");
+                organization = organizationRestClient.getOrganization(organizationId);
+                break;
+            case "discovery":
+                System.out.println("I am using the discovery client");
+                organization = organizationDiscoveryClient.getOrganization(organizationId);
+                break;
+            default:
+            	System.out.println("I am using the rest client");
+                organization = organizationRestClient.getOrganization(organizationId);
+        }
+
+        return organization;
+    }
+
+    public License getLicense(String organizationId,String licenseId, String clientType) {
+    	System.out.println("Before getting findByOrganizationId");
+        License license = licenseRepository.findByOrganizationIdAndLicenseId(organizationId, licenseId);
+
+        System.out.println("Before retriving org info");
+        Organization org = retrieveOrgInfo(organizationId, clientType);
+
+        System.out.println("Before returning info, org is: "+org);
+        System.out.println("Before returning info, license is: "+license);
+        return license
+                .withOrganizationName( org.getName())
+                .withContactName( org.getContactName())
+                .withContactEmail( org.getContactEmail() )
+                .withContactPhone( org.getContactPhone() )
+                .withComment(config.getExampleProperty());
 	}
 
 	public List<License> getLicensesByOrg(String organizationId){

@@ -7,6 +7,7 @@ spring:
     config:
       server:
         native:
-          searchLocations: file:///Users/Arturo/Proyects/Eclipse/Oxygen/SpacePrincipal/Maven/confserv/src/main/resources/config/licensingservice
-
-  
+          searchLocations: file:///Users/Arturo/Repositories/Github/Git-A/BuildingMicroservicesWithSpringCloud/confserv/src/main/resources/config/licensingservice,
+                           file:///Users/Arturo/Repositories/Github/Git-A/BuildingMicroservicesWithSpringCloud/confserv/src/main/resources/config/organizationservice
+        encrypt:
+          enabled: false
