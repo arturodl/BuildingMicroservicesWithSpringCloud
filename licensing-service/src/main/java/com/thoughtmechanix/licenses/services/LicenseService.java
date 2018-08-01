@@ -9,8 +9,13 @@ import org.springframework.stereotype.Service;
 import com.thoughtmechanix.licenses.clients.OrganizationDiscoveryClient;
 import com.thoughtmechanix.licenses.clients.OrganizationFeignClient;
 import com.thoughtmechanix.licenses.clients.OrganizationRestTemplateClient;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
+
 import java.util.List;
 import java.util.UUID;
+import java.util.Random;
+import java.util.ArrayList;
 
 @Service
 public class LicenseService {
@@ -29,12 +34,30 @@ public class LicenseService {
 
     @Autowired
 	OrganizationDiscoveryClient organizationDiscoveryClient;
-
+    
+    @HystrixCommand(
+        commandProperties=
+        {@HystrixProperty(
+        name="execution.isolation.thread.timeoutInMilliseconds",
+        value="10000")})
 	public License getLicense(String organizationId,String licenseId) {
 		License license = licenseRepository.findByOrganizationIdAndLicenseId(
 		organizationId, licenseId);
-		return license.withComment(config.getExampleProperty());
+
+		Organization org = getOrganization(organizationId);
+
+        return license
+                .withOrganizationName( org.getName())
+                .withContactName( org.getContactName())
+                .withContactEmail( org.getContactEmail() )
+                .withContactPhone( org.getContactPhone() )
+                .withComment(config.getExampleProperty());
 	}
+    
+    private Organization getOrganization(String organizationId) {
+        randomlyRunLong();
+        return organizationRestClient.getOrganization(organizationId);
+    }
 
 	private Organization retrieveOrgInfo(String organizationId, String clientType){
 		System.out.println("Getting in retrieveOrgInfo");
@@ -79,9 +102,41 @@ public class LicenseService {
                 .withComment(config.getExampleProperty());
 	}
 
+    private void randomlyRunLong(){
+        Random rand = new Random();
+
+        int randomNum = rand.nextInt((3 - 1) + 1) + 1;
+
+        if (randomNum==3) 
+            sleep();
+    }
+
+    private void sleep(){
+        try {
+            Thread.sleep(11000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @HystrixCommand(fallbackMethod = "buildFallbackLicenseList")
 	public List<License> getLicensesByOrg(String organizationId){
+        randomlyRunLong();
+
 		return licenseRepository.findByOrganizationId( organizationId );
 	}
+
+    private List<License> buildFallbackLicenseList(String organizationId){
+        List<License> fallbackList = new ArrayList<>();
+
+        License license = new License()
+                                .withId("0000000-00-00000")
+                                .withOrganizationId( organizationId )
+                                .withProductName(
+                                "Sorry no licensing information currently available");
+        fallbackList.add(license);
+        return fallbackList;
+    }
 
 	public void saveLicense(License license){
 		license.withId( UUID.randomUUID().toString());
