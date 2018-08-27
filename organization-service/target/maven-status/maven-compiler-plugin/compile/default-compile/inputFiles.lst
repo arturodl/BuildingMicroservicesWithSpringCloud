@@ -1,5 +1,8 @@
-C:\Users\Arturo\Repositories\Github\Git-A\BuildingMicroservicesWithSpringCloud\organization-service\src\main\java\com\thoughtmechanix\organization\Application.java
-C:\Users\Arturo\Repositories\Github\Git-A\BuildingMicroservicesWithSpringCloud\organization-service\src\main\java\com\thoughtmechanix\organization\model\Organization.java
-C:\Users\Arturo\Repositories\Github\Git-A\BuildingMicroservicesWithSpringCloud\organization-service\src\main\java\com\thoughtmechanix\organization\controllers\OrganizationServiceController.java
-C:\Users\Arturo\Repositories\Github\Git-A\BuildingMicroservicesWithSpringCloud\organization-service\src\main\java\com\thoughtmechanix\organization\repository\OrganizationRepository.java
-C:\Users\Arturo\Repositories\Github\Git-A\BuildingMicroservicesWithSpringCloud\organization-service\src\main\java\com\thoughtmechanix\organization\services\OrganizationService.java
+C:\Users\Arturo\Repositories\Git\Github\arturodl\BuildingMicroservicesWithSpringCloud\organization-service\src\main\java\com\thoughtmechanix\organization\Application.java
+C:\Users\Arturo\Repositories\Git\Github\arturodl\BuildingMicroservicesWithSpringCloud\organization-service\src\main\java\com\thoughtmechanix\organization\repository\OrganizationRepository.java
+C:\Users\Arturo\Repositories\Git\Github\arturodl\BuildingMicroservicesWithSpringCloud\organization-service\src\main\java\com\thoughtmechanix\organization\model\Organization.java
+C:\Users\Arturo\Repositories\Git\Github\arturodl\BuildingMicroservicesWithSpringCloud\organization-service\src\main\java\com\thoughtmechanix\organization\services\OrganizationService.java
+C:\Users\Arturo\Repositories\Git\Github\arturodl\BuildingMicroservicesWithSpringCloud\organization-service\src\main\java\com\thoughtmechanix\organization\controllers\OrganizationServiceController.java
+C:\Users\Arturo\Repositories\Git\Github\arturodl\BuildingMicroservicesWithSpringCloud\organization-service\src\main\java\com\thoughtmechanix\organization\utils\UserContextHolder.java
+C:\Users\Arturo\Repositories\Git\Github\arturodl\BuildingMicroservicesWithSpringCloud\organization-service\src\main\java\com\thoughtmechanix\organization\utils\UserContext.java
+C:\Users\Arturo\Repositories\Git\Github\arturodl\BuildingMicroservicesWithSpringCloud\organization-service\src\main\java\com\thoughtmechanix\organization\utils\UserContextFilter.java

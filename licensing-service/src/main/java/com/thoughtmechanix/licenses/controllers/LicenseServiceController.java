@@ -10,7 +10,7 @@ import com.thoughtmechanix.licenses.services.LicenseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
 
-@RestController
+@RestController 
 @RequestMapping(value="/v1/organizations/{organizationId}/licenses")
 public class LicenseServiceController {
 
@@ -26,7 +26,7 @@ public class LicenseServiceController {
     @RequestMapping(value="/{licenseId}",method = RequestMethod.GET)
     public License getLicenses( @PathVariable("organizationId") String organizationId,
                                 @PathVariable("licenseId") String licenseId) {
-
+		System.out.println(">>>>>>>>>>>> Executing getLicenses.");
         return licenseService.getLicense(organizationId, licenseId);
     }
 

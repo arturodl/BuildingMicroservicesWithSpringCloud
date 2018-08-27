@@ -36,11 +36,11 @@ public class LicenseService {
 	OrganizationDiscoveryClient organizationDiscoveryClient;
     
     @HystrixCommand(
-        commandProperties=
-        {@HystrixProperty(
-        name="execution.isolation.thread.timeoutInMilliseconds",
-        value="10000")})
+        commandProperties={
+            @HystrixProperty(name="execution.isolation.thread.timeoutInMilliseconds", value="10000")
+        })
 	public License getLicense(String organizationId,String licenseId) {
+        System.out.println(">>>>>>>>> Getting Licenses.");
 		License license = licenseRepository.findByOrganizationIdAndLicenseId(
 		organizationId, licenseId);
 
