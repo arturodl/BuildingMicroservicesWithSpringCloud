@@ -1,5 +1,0 @@
-com\thoughtmechanix\zuulsvr\filters\ResponseFilter.class
-com\thoughtmechanix\zuulsvr\ZuulServerApplication.class
-com\thoughtmechanix\zuulsvr\filters\SpecialRoutesFilter.class
-com\thoughtmechanix\zuulsvr\filters\FilterUtils.class
-com\thoughtmechanix\zuulsvr\filters\TrackingFilter.class

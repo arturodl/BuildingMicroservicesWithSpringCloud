@@ -9,6 +9,11 @@ import com.thoughtmechanix.licenses.model.License;
 import com.thoughtmechanix.licenses.services.LicenseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import javax.servlet.http.HttpServletRequest;
+
+import com.thoughtmechanix.licenses.utils.UserContextHolder;
 
 @RestController 
 @RequestMapping(value="/v1/organizations/{organizationId}/licenses")
@@ -17,16 +22,24 @@ public class LicenseServiceController {
 	@Autowired
 	private LicenseService licenseService;
 
+	@Autowired
+    private HttpServletRequest request;
+
+	private static final Logger logger = LoggerFactory.getLogger(LicenseServiceController.class);
+
 	@RequestMapping(value="/",method = RequestMethod.GET)
     public List<License> getLicenses( @PathVariable("organizationId") String organizationId) {
-        //logger.debug("LicenseServiceController Correlation id: {}", UserContextHolder.getContext().getCorrelationId());
+        logger.debug(">>>>>>>>>>>>>> LicenseServiceController Correlation id: {}", UserContextHolder.getContext().getCorrelationId());
         return licenseService.getLicensesByOrg(organizationId);
     }
 
     @RequestMapping(value="/{licenseId}",method = RequestMethod.GET)
     public License getLicenses( @PathVariable("organizationId") String organizationId,
                                 @PathVariable("licenseId") String licenseId) {
-		System.out.println(">>>>>>>>>>>> Executing getLicenses.");
+    	logger.debug("Entering the license-service-controller, method getLicenses 2 params");
+        logger.debug("Found tmx-correlation-id in license-service-controller: {} ", request.getHeader("tmx-correlation-id"));
+		//System.out.println(">>>>>>>>>>>> Executing getLicenses.");
+		//System.out.println(">>>>>>>>>>>> The correlationid from getLicenses is: "+UserContextHolder.getContext().getCorrelationId());
         return licenseService.getLicense(organizationId, licenseId);
     }
 

@@ -10,10 +10,14 @@ eureka:
       defaultZone: http://localhost:8761/eureka/
 
 zuul:
-  ignored-services: '*'  # for excluding automated mappings based on eureka services ids
+  ignored-services: '*'  # for excluding automated mappings based on eureka services ids.
   prefix: /api
   routes:
-    organizationservice: /organization/**
-    licensingservice: /licensing/**
+    organizationservice: 
+        path: /organization/**
+        sensitiveHeaders: Cookie, Set-Cookie  # this is a black list of sensitive headers, Authorization could be one
+    licensingservice: 
+        path: /licensing/**
+        sensitiveHeaders: Cookie, Set-Cookie  # this is a black list of sensitive headers, Authorization could be one
   
 

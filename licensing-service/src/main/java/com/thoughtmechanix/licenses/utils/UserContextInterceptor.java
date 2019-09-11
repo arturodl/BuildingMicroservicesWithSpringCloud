@@ -16,7 +16,9 @@ public class UserContextInterceptor implements ClientHttpRequestInterceptor {
     public ClientHttpResponse intercept(
             HttpRequest request, byte[] body, ClientHttpRequestExecution execution)
             throws IOException {
-
+        System.out.println(">>>>>> Executing the UserContextInterceptor from Licensing Service.");
+        System.out.println(">>>>>> The CORRELATION_ID to send is :"+ UserContextHolder.getContext().getCorrelationId());
+        System.out.println(">>>>>> The AUTHORIZATION to send is :"+ UserContextHolder.getContext().getAuthToken());
         HttpHeaders headers = request.getHeaders();
         headers.add(UserContext.CORRELATION_ID, UserContextHolder.getContext().getCorrelationId());
         headers.add(UserContext.AUTH_TOKEN, UserContextHolder.getContext().getAuthToken());

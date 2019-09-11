@@ -9,13 +9,17 @@ import org.springframework.stereotype.Service;
 import com.thoughtmechanix.licenses.clients.OrganizationDiscoveryClient;
 import com.thoughtmechanix.licenses.clients.OrganizationFeignClient;
 import com.thoughtmechanix.licenses.clients.OrganizationRestTemplateClient;
+import com.thoughtmechanix.licenses.clients.OrganizationOAuth2RestTemplateClient;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
+import org.springframework.context.annotation.Scope;
 
 import java.util.List;
 import java.util.UUID;
 import java.util.Random;
 import java.util.ArrayList;
+
+import com.thoughtmechanix.licenses.utils.UserContextHolder;
 
 @Service
 public class LicenseService {
@@ -33,18 +37,23 @@ public class LicenseService {
     OrganizationRestTemplateClient organizationRestClient;
 
     @Autowired
+    OrganizationOAuth2RestTemplateClient organizationOAuth2RestClient;
+
+    @Autowired
 	OrganizationDiscoveryClient organizationDiscoveryClient;
     
-    @HystrixCommand(
+  /*  @HystrixCommand(
         commandProperties={
             @HystrixProperty(name="execution.isolation.thread.timeoutInMilliseconds", value="10000")
-        })
-	public License getLicense(String organizationId,String licenseId) {
+        })*/
+    public License getLicense(String organizationId,String licenseId) {
         System.out.println(">>>>>>>>> Getting Licenses.");
 		License license = licenseRepository.findByOrganizationIdAndLicenseId(
 		organizationId, licenseId);
 
-		Organization org = getOrganization(organizationId);
+        System.out.println(">>>>>>>>>>>> The correlationid from getLicenses HystrixCommand is: "+UserContextHolder.getContext().getCorrelationId());
+		System.out.println(">>>>>>>>>>>> The authorization from getLicenses HystrixCommand is: "+UserContextHolder.getContext().getAuthToken());
+        Organization org = getOrganization(organizationId);
 
         return license
                 .withOrganizationName( org.getName())
@@ -54,9 +63,13 @@ public class LicenseService {
                 .withComment(config.getExampleProperty());
 	}
     
+   @HystrixCommand(
+        commandProperties={
+            @HystrixProperty(name="execution.isolation.thread.timeoutInMilliseconds", value="10000")
+        })
     private Organization getOrganization(String organizationId) {
-        randomlyRunLong();
-        return organizationRestClient.getOrganization(organizationId);
+       // randomlyRunLong();
+        return organizationOAuth2RestClient.getOrganization(organizationId);
     }
 
 	private Organization retrieveOrgInfo(String organizationId, String clientType){
@@ -132,7 +145,7 @@ public class LicenseService {
                         @HystrixProperty(name="metrics.rollingStats.numBuckets", value="5")
                     })
 	public List<License> getLicensesByOrg(String organizationId){
-        randomlyRunLong();
+        //randomlyRunLong();
 
 		return licenseRepository.findByOrganizationId( organizationId );
 	}

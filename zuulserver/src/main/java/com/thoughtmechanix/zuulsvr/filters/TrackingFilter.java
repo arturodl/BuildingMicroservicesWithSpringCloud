@@ -43,21 +43,21 @@ public class TrackingFilter extends ZuulFilter{
     }
 
     public Object run() {
-        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>> Running TrakingFilter.");
+        System.out.println(">>>>>>>>>>>>>>>> Running TrakingFilter as Pre-Filter.");
         if (isCorrelationIdPresent()) {
            logger.debug("tmx-correlation-id found in tracking filter: {}. ", filterUtils.getCorrelationId());
-           System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>> There's already a correlation-id.");
+           System.out.println(">>>>>>>>>>>>>>>>> There's already a correlation-id [Pre-Filter Message]");
         }
         else{
             filterUtils.setCorrelationId(generateCorrelationId());
             logger.debug("tmx-correlation-id generated in tracking filter: {}.", filterUtils.getCorrelationId());
-            System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>> There's not any correlation-id, we'll generate one for you.");
+            System.out.println(">>>>>>>>>>>>>>>> There's not any correlation-id, we'll generate one for you. [Pre-Filter Message]");
         }
 
         RequestContext ctx = RequestContext.getCurrentContext();
         logger.debug("Processing incoming request for {}.",  ctx.getRequest().getRequestURI());
 
-        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>> Ending TrackingFilter for: "+ filterUtils.getCorrelationId());
+        System.out.println(">>>>>>>>>>>>>>>> Ending TrackingFilter as Pre-Filter for: "+ filterUtils.getCorrelationId());
         return null;
     }
 }
