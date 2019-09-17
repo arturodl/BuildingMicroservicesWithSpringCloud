@@ -8,6 +8,7 @@ spring:
       server:
         native:
           searchLocations: file:///Users/Arturo/Repositories/Git/Github/arturodl/BuildingMicroservicesWithSpringCloud/confserv/src/main/resources/config/licensingservice,
-                           file:///Users/Arturo/Repositories/Git/Github/arturodl/BuildingMicroservicesWithSpringCloud/confserv/src/main/resources/config/organizationservice
+                           file:///Users/Arturo/Repositories/Git/Github/arturodl/BuildingMicroservicesWithSpringCloud/confserv/src/main/resources/config/organizationservice,
+                           file:///Users/Arturo/Repositories/Git/Github/arturodl/BuildingMicroservicesWithSpringCloud/confserv/src/main/resources/config/authenticationservice
         encrypt:
           enabled: false

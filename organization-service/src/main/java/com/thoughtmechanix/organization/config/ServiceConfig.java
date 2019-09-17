@@ -1,4 +1,4 @@
-package com.thoughtmechanix.licenses.config;
+package com.thoughtmechanix.organization.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -12,12 +12,5 @@ public class ServiceConfig{
   public String getJwtSigningKey() {
     return jwtSigningKey;
   }
-
-  // Example code for getting a property from configuration
-  @Value("${example.property}")
-  private String exampleProperty;
-
-  public String getExampleProperty(){
-    return exampleProperty;
-  }
+  
 }

@@ -8,6 +8,20 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
+import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
+import org.springframework.security.oauth2.provider.token.TokenEnhancer;
+import org.springframework.security.oauth2.provider.token.TokenEnhancerChain;
+import org.springframework.security.oauth2.provider.token.TokenStore;
+import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
+
+import java.util.Arrays;
+
+/* According to Spring Microservices Book we are needing to replace this class with another called
+   JWTOAuth2Config, because practically there's no difference between JWTOAuth2Config class and this class 
+   but only in some injections we decided to keep this file and just add the differences.
+
+   Any doubt please go and look for JWTOAuth2Config in book's repositories.
+*/
 
 @Configuration
 public class OAuth2Config extends AuthorizationServerConfigurerAdapter{
@@ -17,6 +31,18 @@ public class OAuth2Config extends AuthorizationServerConfigurerAdapter{
 
 	@Autowired
 	private UserDetailsService userDetailsService;
+
+    @Autowired
+    private TokenStore tokenStore;
+
+    @Autowired
+    private DefaultTokenServices tokenServices;
+
+    @Autowired
+    private JwtAccessTokenConverter jwtAccessTokenConverter;
+
+    @Autowired
+    private TokenEnhancer jwtTokenEnhancer;
 
 	@Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
@@ -29,7 +55,12 @@ public class OAuth2Config extends AuthorizationServerConfigurerAdapter{
 
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
-      endpoints
+       TokenEnhancerChain tokenEnhancerChain = new TokenEnhancerChain();
+       tokenEnhancerChain.setTokenEnhancers(Arrays.asList(jwtTokenEnhancer, jwtAccessTokenConverter));
+
+       endpoints.tokenStore(tokenStore)                              //JWT
+                .accessTokenConverter(jwtAccessTokenConverter)       //JWT
+                .tokenEnhancer(tokenEnhancerChain)                   //JWT
         .authenticationManager(authenticationManager)
         .userDetailsService(userDetailsService);
     }

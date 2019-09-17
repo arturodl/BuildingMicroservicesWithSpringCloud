@@ -7,3 +7,5 @@ spring:
   cloud:
     config:
       enabled: true
+signing:
+  key: "345345fsdfsf5345"

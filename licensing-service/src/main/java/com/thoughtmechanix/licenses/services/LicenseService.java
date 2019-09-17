@@ -69,7 +69,7 @@ public class LicenseService {
         })
     private Organization getOrganization(String organizationId) {
        // randomlyRunLong();
-        return organizationOAuth2RestClient.getOrganization(organizationId);
+        return organizationRestClient.getOrganization(organizationId);
     }
 
 	private Organization retrieveOrgInfo(String organizationId, String clientType){
