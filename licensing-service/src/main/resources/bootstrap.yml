@@ -7,3 +7,12 @@ spring:
   cloud:
     config:
       uri: http://localhost:8888
+    stream:
+      bindings:
+        inboundOrgChanges:
+          destination: orgChangeTopic
+          content-type: application/json
+          group: licensingGroup
+        binder:
+          zkNodes: localhost
+          brokers: localhost

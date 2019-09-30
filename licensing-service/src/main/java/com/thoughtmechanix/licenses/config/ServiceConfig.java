@@ -9,15 +9,30 @@ public class ServiceConfig{
   @Value("${signing.key}")
   private String jwtSigningKey="";
 
-  public String getJwtSigningKey() {
-    return jwtSigningKey;
-  }
-
   // Example code for getting a property from configuration
   @Value("${example.property}")
   private String exampleProperty;
 
+  @Value("${redis.server}")
+  private String redisServer="";
+
+  @Value("${redis.port}")
+  private String redisPort="";
+
+  public String getJwtSigningKey() {
+    return jwtSigningKey;
+  }
+
   public String getExampleProperty(){
     return exampleProperty;
+  } 
+
+  public String getRedisServer(){
+    return redisServer;
   }
+
+  public Integer getRedisPort(){
+    return new Integer( redisPort ).intValue();
+  }
+  
 }
