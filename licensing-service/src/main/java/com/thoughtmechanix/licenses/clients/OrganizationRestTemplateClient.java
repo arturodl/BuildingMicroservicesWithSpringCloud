@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import java.util.List;
+import com.thoughtmechanix.licenses.config.ServiceConfig;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,13 +56,15 @@ public class OrganizationRestTemplateClient {
         }
 
         logger.debug("Unable to locate organization from the redis cache: {}.", organizationId);
-
+        logger.debug("Now we are getting the info for this org: {}.", organizationId);
+        logger.debug("Url to be invoked: {}", "http://zuulservice/api/organization/v1/organizations/"+ organizationId);
         ResponseEntity<Organization> restExchange =
                 restTemplate.exchange(
-                        "http://organizationservice/v1/organizations/{organizationId}",
+                        "http://zuulservice/api/organization/v1/organizations/{organizationId}",
                         HttpMethod.GET,
                         null, Organization.class, organizationId);
 
+        logger.debug("After retriving info for the org: {}.", organizationId);
          /*Save the record from cache*/
         org = restExchange.getBody();
 
@@ -69,6 +72,7 @@ public class OrganizationRestTemplateClient {
             cacheOrganizationObject(org);
         }
 
+        logger.debug("Returnin org: {}.", organizationId);
         return org;
     }
 }

@@ -16,8 +16,8 @@
     <java.version>1.8</java.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <start-class>com.thoughtmechanix.authentication.Application</start-class>
-    <docker.image.name>johncarnell/tmx-authentication-service</docker.image.name>
-    <docker.image.tag>chapter7</docker.image.tag>
+    <docker.image.name>arturodl/bms-authenticationservice</docker.image.name>
+    <docker.image.tag>develop</docker.image.tag>
   </properties>
 
   <parent>
@@ -75,48 +75,54 @@
   </dependencies>
 
   <build>
-    <pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
-      <plugins>
-        <!-- clean lifecycle, see https://maven.apache.org/ref/current/maven-core/lifecycles.html#clean_Lifecycle -->
-        <plugin>
-          <artifactId>maven-clean-plugin</artifactId>
-          <version>3.1.0</version>
-        </plugin>
-        <!-- default lifecycle, jar packaging: see https://maven.apache.org/ref/current/maven-core/default-bindings.html#Plugin_bindings_for_jar_packaging -->
-        <plugin>
-          <artifactId>maven-resources-plugin</artifactId>
-          <version>3.0.2</version>
-        </plugin>
-        <plugin>
-          <artifactId>maven-compiler-plugin</artifactId>
-          <version>3.8.0</version>
-        </plugin>
-        <plugin>
-          <artifactId>maven-surefire-plugin</artifactId>
-          <version>2.22.1</version>
-        </plugin>
-        <plugin>
-          <artifactId>maven-jar-plugin</artifactId>
-          <version>3.0.2</version>
-        </plugin>
-        <plugin>
-          <artifactId>maven-install-plugin</artifactId>
-          <version>2.5.2</version>
-        </plugin>
-        <plugin>
-          <artifactId>maven-deploy-plugin</artifactId>
-          <version>2.8.2</version>
-        </plugin>
-        <!-- site lifecycle, see https://maven.apache.org/ref/current/maven-core/lifecycles.html#site_Lifecycle -->
-        <plugin>
-          <artifactId>maven-site-plugin</artifactId>
-          <version>3.7.1</version>
-        </plugin>
-        <plugin>
-          <artifactId>maven-project-info-reports-plugin</artifactId>
-          <version>3.0.0</version>
-        </plugin>
-      </plugins>
-    </pluginManagement>
-  </build>
+     <plugins>
+         <!-- We use the Resources plugin to filer Dockerfile and run.sh, it inserts actual JAR filename -->
+         <!-- The final Dockerfile will be created in target/dockerfile/Dockerfile -->
+         <plugin>
+             <artifactId>maven-resources-plugin</artifactId>
+             <executions>
+                 <execution>
+                     <id>copy-resources</id>
+                     <!-- here the phase you need -->
+                     <phase>validate</phase>
+                     <goals>
+                         <goal>copy-resources</goal>
+                     </goals>
+                     <configuration>
+                         <outputDirectory>${basedir}/target/dockerfile</outputDirectory>
+                         <resources>
+                             <resource>
+                                 <directory>src/main/docker</directory>
+                                 <filtering>true</filtering>
+                             </resource>
+                         </resources>
+                     </configuration>
+                 </execution>
+             </executions>
+         </plugin>
+         <plugin>
+             <groupId>com.spotify</groupId>
+             <artifactId>docker-maven-plugin</artifactId>
+             <version>0.4.10</version>
+             <configuration>
+                 <imageName>${docker.image.name}:${docker.image.tag}</imageName>
+                 <dockerDirectory>${basedir}/target/dockerfile</dockerDirectory>
+                 <resources>
+                     <resource>
+                         <targetPath>/</targetPath>
+                         <directory>${project.build.directory}</directory>
+                         <include>${project.build.finalName}.jar</include>
+                     </resource>
+                 </resources>
+             </configuration>
+         </plugin>
+         <plugin>
+             <groupId>org.springframework.boot</groupId>
+             <artifactId>spring-boot-maven-plugin</artifactId>
+         </plugin>
+     </plugins>
+ </build>
+
+  
+
 </project>

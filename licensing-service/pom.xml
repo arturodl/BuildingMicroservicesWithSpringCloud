@@ -16,8 +16,8 @@ http://maven.apache.org/xsd/maven-4.0.0.xsd">
     	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<java.version>1.8</java.version>
 		<start-class>com.thoughtmechanix.licenses.Application</start-class>
-	    <docker.image.name>arturodl/tmx-licensing-service</docker.image.name>
-		<docker.image.tag>chapterSix</docker.image.tag>				
+	    <docker.image.name>arturodl/bms-licensingservice</docker.image.name>
+		<docker.image.tag>develop</docker.image.tag>				
 	</properties>
 	
 	<parent>

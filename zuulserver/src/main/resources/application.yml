@@ -19,5 +19,13 @@ zuul:
     licensingservice: 
         path: /licensing/**
         sensitiveHeaders: Cookie, Set-Cookie  # this is a black list of sensitive headers, Authorization could be one
+
+
+# Connect timeout used by Apache HttpClient
+ribbon:
+  connectTimeout: 3000
+  readTimeout: 5000
+# Read timeout used by Apache HttpClient
+
   
 

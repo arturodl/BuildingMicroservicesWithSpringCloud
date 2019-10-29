@@ -13,6 +13,9 @@ public class ServiceConfig{
   @Value("${example.property}")
   private String exampleProperty;
 
+  @Value("${bms.zuul.server.uri}")
+  private String zuulServerUri="";
+
   @Value("${redis.server}")
   private String redisServer="";
 
@@ -26,6 +29,10 @@ public class ServiceConfig{
   public String getExampleProperty(){
     return exampleProperty;
   } 
+
+  public String getZuulServerUri(){
+    return zuulServerUri;
+  }
 
   public String getRedisServer(){
     return redisServer;

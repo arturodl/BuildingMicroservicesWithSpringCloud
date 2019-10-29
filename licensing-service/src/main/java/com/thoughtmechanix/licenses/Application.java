@@ -31,10 +31,12 @@ import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import com.thoughtmechanix.licenses.config.ServiceConfig;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 
 @SpringBootApplication
-@EnableDiscoveryClient
-@EnableFeignClients
+//@EnableDiscoveryClient
+@EnableEurekaClient
+//@EnableFeignClients
 @EnableCircuitBreaker
 @EnableResourceServer
 //@EnableBinding(Sink.class)

@@ -18,6 +18,13 @@ maven.apache.org/xsd/maven-4.0.0.xsd">
 	    <version>1.4.4.RELEASE</version>
     </parent>
 
+    <properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<java.version>1.8</java.version>
+		<docker.image.name>arturodl/bms-eurekaserver</docker.image.name>
+		<docker.image.tag>develop</docker.image.tag>
+	</properties>
+
 	<dependencyManagement>
 	    <dependencies>
 	      <dependency>
@@ -36,5 +43,54 @@ maven.apache.org/xsd/maven-4.0.0.xsd">
 		<artifactId>spring-cloud-starter-eureka-server</artifactId>
 		</dependency>
 	</dependencies>
+
+	<build>
+		<plugins>
+			<!-- We use the Resources plugin to filer Dockerfile and run.sh, it inserts actual JAR filename -->
+	         <!-- The final Dockerfile will be created in target/dockerfile/Dockerfile -->
+	         <plugin>
+	             <artifactId>maven-resources-plugin</artifactId>
+	             <executions>
+	                 <execution>
+	                     <id>copy-resources</id>
+	                     <!-- here the phase you need -->
+	                     <phase>validate</phase>
+	                     <goals>
+	                         <goal>copy-resources</goal>
+	                     </goals>
+	                     <configuration>
+	                         <outputDirectory>${basedir}/target/dockerfile</outputDirectory>
+	                         <resources>
+	                             <resource>
+	                                 <directory>src/main/docker</directory>
+	                                 <filtering>true</filtering>
+	                             </resource>
+	                         </resources>
+	                     </configuration>
+	                 </execution>
+	             </executions>
+	        </plugin>
+	        <plugin>
+	             <groupId>com.spotify</groupId>
+	             <artifactId>docker-maven-plugin</artifactId>
+	             <version>0.4.10</version>
+	             <configuration>
+	                 <imageName>${docker.image.name}:${docker.image.tag}</imageName>
+	                 <dockerDirectory>${basedir}/target/dockerfile</dockerDirectory>
+	                 <resources>
+	                     <resource>
+	                         <targetPath>/</targetPath>
+	                         <directory>${project.build.directory}</directory>
+	                         <include>${project.build.finalName}.jar</include>
+	                     </resource>
+	                 </resources>
+	             </configuration>
+			</plugin>																						  
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
 	
 </project>
