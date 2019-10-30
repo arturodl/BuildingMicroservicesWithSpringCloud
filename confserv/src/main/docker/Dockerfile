@@ -11,6 +11,7 @@ ADD  @project.build.finalName@.jar /usr/local/configserver/
 ADD run.sh run.sh
 RUN chmod +x run.sh
 EXPOSE 8888
-ENTRYPOINT ["sh", "/run.sh"]
-#CMD ["./run.sh"]
+ENV EUREKASERVER_PORT=8761
+#ENTRYPOINT ["sh", "/run.sh"]
+CMD ["./run.sh"]
 

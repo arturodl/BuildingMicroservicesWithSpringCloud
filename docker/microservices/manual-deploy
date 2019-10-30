@@ -1,0 +1,22 @@
+
+docker network create microservices
+
+docker run -d --name database -p 5432:5432 --net microservices -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=admin -e POSTGRES_DB=eagle_eye_local postgres:9.5
+
+docker run -d -p 6379:6379 --name redis --net microservices redis:alpine
+
+docker run -d -p 2181:2181 -p 9092:9092 --name kafkaserver --net microservices spotify/kafka
+
+docker run -d -p 8888:8888 --name configserver --net microservices arturodl/bms-configserver:develop
+
+docker run -d -p 8761:8761 --name eurekaserver --net microservices arturodl/bms-eurekaserver:develop
+
+docker run -d -p 8090:8090 --name licensingservice --net microservices arturodl/bms-licensingservice:develop
+
+docker run -d -p 8080:8080 --name organizationservice --net microservices arturodl/bms-organizationservice:develop
+
+docker run -d -p 5555:5555 --name zuulserver --net microservices arturodl/bms-zuulserver:develop
+
+docker run -d -p 8901:8901 --name authenticationservice --net microservices arturodl/bms-authenticationservice:develop
+
+docker logs -f <nameservice> // use this comand to see how it's behaving the service
